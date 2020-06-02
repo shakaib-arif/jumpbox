@@ -1,0 +1,15 @@
+version: '3'
+services:
+  jumpbox-vm:
+    container_name: jumpbox
+    build:
+      dockerfile: ./Dockerfile-jumpbox
+      context: .
+      args:
+        - USER_NAME=admin
+    environment:
+      - DEBIAN_FRONTEND=noninteractive
+      - ACCEPT_EULA=Y
+    ports:
+      - "3306"
+    hostname: jumpbox
