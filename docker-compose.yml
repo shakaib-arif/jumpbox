@@ -3,7 +3,7 @@ services:
   jumpbox-vm:
     container_name: jumpbox
     build:
-      dockerfile: ./Dockerfile-jumpbox
+      dockerfile: ./Dockerfile
       context: .
       args:
         - USER_NAME=admin
