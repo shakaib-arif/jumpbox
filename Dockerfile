@@ -30,15 +30,13 @@ Run curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add - 
 Env ACCEPT_EULA=Y
 Run apt-get update && \
     apt-get install -y mssql-tools unixodbc-dev
-# install mysql client: 
-Run apt-get install -y mysql-client
+# install mysql
+Run apt-get install -y mysql-client mysql-server
 # install kubectl
 Run curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl   && \
     chmod +x ./kubectl                                                                                                                                                          && \
     sudo mv ./kubectl /usr/local/bin/kubectl
 # install helm
-# helm init --client-only
-# Run curl https://storage.googleapis.com/kubernetes-helm/helm-v2.14.0-linux-amd64.tar.gz > ./helm.tar.gz
 Run curl https://get.helm.sh/helm-v2.14.0-linux-amd64.tar.gz > ./helm.tar.gz    && \
     tar -xvf ./helm.tar.gz                                                      && \ 
     mv ./linux-amd64/helm /usr/local/bin                                        && \
@@ -82,7 +80,8 @@ Run apt-get update                                                              
 Run curl -L "https://github.com/docker/compose/releases/download/1.25.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose  && \
     chmod +x /usr/local/bin/docker-compose                                                                                                        && \
     ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
-Run apt-get install -y supervisor mysql-server
+# install supervisor (init scheme)
+Run apt-get install -y supervisor 
 COPY ./supervisord.conf /etc/supervisord.conf
 ARG USER_NAME
 Run useradd -m -d /home/$USER_NAME -s /bin/bash $USER_NAME
