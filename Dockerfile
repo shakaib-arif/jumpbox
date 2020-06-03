@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:latest
 # disable package prompt interaction
 ENV DEBIAN_FRONTEND noninteractive
 Run apt-get update      && \
@@ -28,7 +28,9 @@ Run apt-get install zip unzip
 Run curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add - && \
     curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list | sudo tee /etc/apt/sources.list.d/msprod.list
 Env ACCEPT_EULA=Y
-Run apt-get update && \
+Run wget http://archive.ubuntu.com/ubuntu/pool/main/g/glibc/multiarch-support_2.27-3ubuntu1_amd64.deb && \
+    apt-get update                                                                                    && \
+    apt-get install -y ./multiarch-support_2.27-3ubuntu1_amd64.deb                                    && \
     apt-get install -y mssql-tools unixodbc-dev
 # install mysql
 Run apt-get install -y mysql-client mysql-server
@@ -45,11 +47,11 @@ Run curl https://get.helm.sh/helm-v2.14.0-linux-amd64.tar.gz > ./helm.tar.gz    
 # install az
 Run curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 # install powershell
-Run wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb  && \
-    dpkg -i packages-microsoft-prod.deb                                                     && \
-    apt-get update                                                                          && \
-    add-apt-repository universe -y                                                          && \
-    apt-get install -y powershell
+# Run wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb  && \
+#     dpkg -i packages-microsoft-prod.deb                                                     && \
+#     apt-get update                                                                          && \
+#     add-apt-repository universe -y                                                          && \
+#     apt-get install -y powershell
 # install powershell module Az command: 
 # install-Module -Name Az -AllowClobber -Scope CurrentUser
 # install AzCopy
