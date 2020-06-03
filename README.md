@@ -17,6 +17,8 @@ We have used **`supervisor`** as an init scheme for linux processes. So, we can 
 * helm
 * az
 * powershell
+
+    > Not available in ubuntu-20.04 and it's a known [issue](https://github.com/PowerShell/PowerShell/issues/12626).
 * azCopy
 * mongodb
 * git
