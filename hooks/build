@@ -1,0 +1,3 @@
+#!/bin/bash
+USER=admin
+docker build --build-arg USER_NAME=$USER -t $IMAGE_NAME .
