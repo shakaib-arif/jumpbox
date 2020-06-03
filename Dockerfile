@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM ubuntu:20.04
 # disable package prompt interaction
 ENV DEBIAN_FRONTEND noninteractive
 Run apt-get update      && \
