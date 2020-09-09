@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:focal-20200720
 # disable package prompt interaction
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update      && \
