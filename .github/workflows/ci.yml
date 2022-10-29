@@ -3,10 +3,20 @@ name: Docker Image CI
 on:
   push:
     branches: [ "feature/github-action" ]
-  pull_request:
-    branches: [ "master" ]
+  # pull_request:
+  #   branches: [ "master" ]
 
 jobs:
+  pull_request_build:
+
+    runs-on: ubuntu-latest
+
+    if: (github.event_name == 'pull_request' && github.head_ref == 'master')
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag jumpbox:$(date +%s)
 
   build:
 
