@@ -3,7 +3,7 @@ FROM ubuntu:focal-20200720
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update      && \
     apt-get -y upgrade  && \
-    apt-get install -y     \ 
+    apt-get install -y     \
         software-properties-common \
         dirmngr                    \
         vim                        \
@@ -26,7 +26,7 @@ RUN add-apt-repository ppa:rmescandon/yq -y && \
 RUN apt-get install zip unzip
 # install sqlcmd
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add - && \
-    curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list | sudo tee /etc/apt/sources.list.d/msprod.list
+    curl https://packages.microsoft.com/config/ubuntu/20.04/prod.list | sudo tee /etc/apt/sources.list.d/msprod.list
 ENV ACCEPT_EULA=Y
 RUN apt-get update && \
     apt-get install -y mssql-tools unixodbc-dev
@@ -83,7 +83,7 @@ RUN curl -L "https://github.com/docker/compose/releases/download/1.25.5/docker-c
 # install supervisor (init scheme)
 RUN apt-get install -y supervisor 
 COPY ./supervisord.conf /etc/supervisord.conf
-ARG USER_NAME
+ARG USER_NAME=admin
 RUN useradd -m -d /home/$USER_NAME -s /bin/bash $USER_NAME
 RUN echo "$USER_NAME:Password" | chpasswd
 RUN usermod -aG docker $USER_NAME && usermod -aG sudo $USER_NAME
