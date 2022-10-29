@@ -4,7 +4,9 @@ on:
   schedule:
     - cron: 0 9 1 * *
   push:
-    branches: [ "master" ]
+    branches: 
+    - "master"
+    - "release/*"
   pull_request:
     branches: [ "master" ]
 
@@ -32,11 +34,11 @@ jobs:
     
     - name: Sets env vars for staging
       run: echo "TAG_NAME=18.04" >> $GITHUB_ENV
-      if: ${{ github.ref == 'refs/heads/ubuntu-18.04' }}
+      if: ${{ github.ref == 'refs/heads/release/ubuntu-18.04' }}
     
     - name: Sets env vars for staging
       run: echo "TAG_NAME=20.04" >> $GITHUB_ENV
-      if: ${{ github.ref == 'refs/heads/ubuntu-20.04' }}
+      if: ${{ github.ref == 'refs/heads/release/ubuntu-20.04' }}
     
     - name: Login to Docker Hub
       uses: docker/login-action@v2
