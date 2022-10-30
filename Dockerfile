@@ -48,6 +48,8 @@ RUN apt install -y mongodb
 RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl  \
     && chmod +x ./kubectl                                                                                                                                                      \
     && mv ./kubectl /usr/local/bin/kubectl
+# configure kubectl autocomplete
+RUN kubectl completion bash | tee /etc/bash_completion.d/kubectl > /dev/null
 # install helm 2
 RUN curl https://get.helm.sh/helm-v2.17.0-linux-amd64.tar.gz > ./helm2.tar.gz   \
     && tar -xvf ./helm2.tar.gz                                                  \
@@ -58,6 +60,8 @@ RUN curl https://get.helm.sh/helm-v2.17.0-linux-amd64.tar.gz > ./helm2.tar.gz   
 RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3   \
     && chmod 700 get_helm.sh                                                                        \
     && ./get_helm.sh
+# configure helm autocomplete
+RUN helm completion bash    | tee /etc/bash_completion.d/helm    > /dev/null
 # install kubelogin
 RUN apt install wget unzip -y                                                                      \
     && wget https://github.com/Azure/kubelogin/releases/download/v0.0.20/kubelogin-linux-amd64.zip \
@@ -68,7 +72,7 @@ RUN apt install wget unzip -y                                                   
 RUN git clone https://github.com/ahmetb/kubectx /opt/kubectx \
     && ln -s /opt/kubectx/kubectx /usr/local/bin/kubectx     \
     && ln -s /opt/kubectx/kubens /usr/local/bin/kubens
-# install krew plugin autocomplete
+# configure krew plugin autocomplete
 RUN ln -sf /opt/kubectx/completion/kubens.bash /etc/bash_completion.d/kubens \
     && ln -sf /opt/kubectx/completion/kubectx.bash /etc/bash_completion.d/kubectx
 # linkerd cli
