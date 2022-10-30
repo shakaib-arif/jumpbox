@@ -114,8 +114,9 @@ RUN apt install -y mongodb
 # install git
 RUN apt-get install -y git
 # install node
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - \
-    &&  apt-get install -y nodejs
+# RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - \
+#     &&  apt-get install -y nodejs
+RUN apt-get install -y nodejs
 # install npm
 RUN apt-get install -y npm
 # install tsc typescript
