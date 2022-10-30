@@ -60,6 +60,13 @@ RUN apt install wget unzip -y                                                   
     && unzip kubelogin-linux-amd64.zip                                                             \
     && mv bin/linux_amd64/kubelogin /usr/bin                                                       \
     && rm -r kubelogin-linux-amd64.zip bin/linux_amd64
+# install krew plugin
+RUN git clone https://github.com/ahmetb/kubectx /opt/kubectx \
+    && ln -s /opt/kubectx/kubectx /usr/local/bin/kubectx     \
+    && ln -s /opt/kubectx/kubens /usr/local/bin/kubens
+# install krew plugin autocomplete
+RUN ln -sf /opt/kubectx/completion/kubens.bash /etc/bash_completion.d/kubens \
+    && ln -sf /opt/kubectx/completion/kubectx.bash /etc/bash_completion.d/kubectx
 # linkerd cli
 RUN curl --proto '=https' --tlsv1.2 -sSfL https://run.linkerd.io/install | sh \
     && mv ~/.linkerd2/bin/linkerd-* /usr/local/bin/linkerd
@@ -137,11 +144,22 @@ RUN curl -L "https://github.com/docker/compose/releases/download/1.25.5/docker-c
 RUN apt-get install -y supervisor 
 COPY ./supervisord.conf /etc/supervisord.conf
 ARG USER_NAME=admin
+ARG USER_PASSWORD=Password
 RUN useradd -m -d /home/$USER_NAME -s /bin/bash $USER_NAME
-RUN echo "$USER_NAME:Password" | chpasswd
+RUN echo "$USER_NAME:$USER_PASSWORD" | chpasswd
 RUN usermod -aG docker $USER_NAME && usermod -aG sudo $USER_NAME
 WORKDIR /home/$USER_NAME
 USER $USER_NAME
+# isntall krew
+RUN ( \
+    set -x; cd "$(mktemp -d)" \
+    && OS="$(uname | tr '[:upper:]' '[:lower:]')" \
+    && ARCH="$(uname -m | sed -e 's/x86_64/amd64/' -e 's/\(arm\)\(64\)\?.*/\1\2/' -e 's/aarch64$/arm64/')" \
+    && KREW="krew-${OS}_${ARCH}" \
+    && curl -fsSLO "https://github.com/kubernetes-sigs/krew/releases/latest/download/${KREW}.tar.gz" \
+    && tar zxvf "${KREW}.tar.gz" \
+    && ./"${KREW}" install krew \
+    )
 # ports and entrypoint configuration
 EXPOSE 3306
 CMD ["/usr/bin/supervisord"]
