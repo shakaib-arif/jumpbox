@@ -32,6 +32,8 @@ RUN add-apt-repository ppa:rmescandon/yq -y \
     &&  apt install yq -y
 # install zip unzip
 RUN apt-get install zip unzip
+# install git
+RUN apt-get install -y git
 # install sqlcmd
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
     &&  curl https://packages.microsoft.com/config/ubuntu/20.04/prod.list | tee /etc/apt/sources.list.d/msprod.list
@@ -40,6 +42,8 @@ RUN apt-get update \
     &&  apt-get install -y mssql-tools unixodbc-dev
 # install mysql
 RUN apt-get install -y mysql-client mysql-server
+# mongodb client 
+RUN apt install -y mongodb
 # install kubectl
 RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl   \
     &&  chmod +x ./kubectl                                                                                                                                                      \
@@ -116,10 +120,6 @@ RUN wget https://aka.ms/downloadazcopy-v10-linux    \
 # install az devops
 # az devops configure --defaults organization-https://dev.azure.com/contosoWebApp project=PaymentModule
 # install az pipelines
-# mongodb client 
-RUN apt install -y mongodb
-# install git
-RUN apt-get install -y git
 # install node
 # RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - \
 #     &&  apt-get install -y nodejs
