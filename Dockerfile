@@ -114,7 +114,7 @@ RUN apt install -y mongodb
 # install git
 RUN apt-get install -y git
 # install node
-RUN curl -sL https://deb.nodesource.com/setup_14.x | -E bash - \
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - \
     &&  apt-get install -y nodejs
 # install npm
 RUN apt-get install -y npm
@@ -139,8 +139,8 @@ ARG USER_NAME=admin
 RUN useradd -m -d /home/$USER_NAME -s /bin/bash $USER_NAME
 RUN echo "$USER_NAME:Password" | chpasswd
 RUN usermod -aG docker $USER_NAME && usermod -aG sudo $USER_NAME
-#USER $USER_NAME
 WORKDIR /home/$USER_NAME
+USER $USER_NAME
 # ports and entrypoint configuration
 EXPOSE 3306
 CMD ["/usr/bin/supervisord"]
