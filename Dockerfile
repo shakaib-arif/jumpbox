@@ -93,6 +93,10 @@ RUN echo ${TERRAFORM_URL}                                   \
 # install ansible
 RUN apt install -y python3-pip \
     && python3 -m pip install --user ansible
+# install AWS CLI
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
+    && unzip awscliv2.zip                                                             \
+    && ./aws/install
 # install az CLI
 RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
 # install az extensions
@@ -101,35 +105,30 @@ RUN az extension add --yes --name aks-preview               \
     && az extension add --yes --name azure-devops           \
     && az extension add --yes --name ssh                    \
     && az extension add --yes --name storage-preview 
-# install AWS CLI
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
-    && unzip awscliv2.zip                                                             \
-    && ./aws/install
+#   az devops configure --defaults organization-https://dev.azure.com/contosoWebApp project=PaymentModule
+# install AzCopy
+RUN wget https://aka.ms/downloadazcopy-v10-linux    \
+    &&  tar -xvf downloadazcopy-v10-linux           \
+    &&  cp ./azcopy_linux_amd64_*/azcopy /usr/bin/
 # install powershell
 RUN wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb  \
     &&  dpkg -i packages-microsoft-prod.deb                                                 \
     &&  apt-get update                                                                      \
     &&  add-apt-repository universe -y                                                      \
     &&  apt-get install -y powershell
-# install powershell module Az command: 
-# install-Module -Name Az -AllowClobber -Scope CurrentUser
-# install AzCopy
-RUN wget https://aka.ms/downloadazcopy-v10-linux    \
-    &&  tar -xvf downloadazcopy-v10-linux           \
-    &&  cp ./azcopy_linux_amd64_*/azcopy /usr/bin/
-# install az devops
-# az devops configure --defaults organization-https://dev.azure.com/contosoWebApp project=PaymentModule
-# install az pipelines
+#   install powershell module Az command: 
+#   install-Module -Name Az -AllowClobber -Scope CurrentUser
 # install node
-# RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - \
-#     &&  apt-get install -y nodejs
+#   old command disabled
+#   RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - \
+#   &&  apt-get install -y nodejs
 RUN apt-get install -y nodejs
 # install npm
 RUN apt-get install -y npm
 # install tsc typescript
 # install docker
 RUN apt-get update                                                                          \
-    &&  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -        \
+    &&  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -             \
     &&  add-apt-repository                                                                  \
         "deb [arch=amd64] https://download.docker.com/linux/ubuntu                          \
         $(lsb_release -cs)                                                                  \
