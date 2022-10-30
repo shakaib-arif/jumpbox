@@ -35,10 +35,10 @@ RUN apt-get install zip unzip
 # install git
 RUN apt-get install -y git
 # install sqlcmd
-RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
-    && curl https://packages.microsoft.com/config/ubuntu/20.04/prod.list | tee /etc/apt/sources.list.d/msprod.list
 ENV ACCEPT_EULA=Y
-RUN apt-get update \
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -                                         \
+    && curl https://packages.microsoft.com/config/ubuntu/20.04/prod.list | tee /etc/apt/sources.list.d/msprod.list \
+    && apt-get update                                                                                              \
     && apt-get install -y mssql-tools unixodbc-dev
 # install mysql
 RUN apt-get install -y mysql-client mysql-server
